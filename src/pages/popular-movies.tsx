@@ -11,6 +11,10 @@ export function PopularMovies() {
     setMovies(popularMovies);
   }
 
+  function handleOpenModal() {
+    alert("clicou");
+  }
+
   useEffect(() => {
     fetchMovies();
   }, []);
@@ -25,7 +29,11 @@ export function PopularMovies() {
       </header>
       <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-10 mt-10">
         {movies.map((movie) => (
-          <MovieCard key={movie.id} movie={movie} />
+          <MovieCard
+            key={movie.id}
+            movie={movie}
+            handleOpenModal={handleOpenModal}
+          />
         ))}
       </section>
     </div>

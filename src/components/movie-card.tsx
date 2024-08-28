@@ -3,9 +3,10 @@ import { Movie } from "../types/movie";
 
 type MovieCardProps = {
   movie: Movie;
+  handleOpenModal: () => void;
 };
 
-export function MovieCard({ movie }: MovieCardProps) {
+export function MovieCard({ movie, handleOpenModal }: MovieCardProps) {
   const { title, poster_path, overview, vote_average, genre_ids } = movie;
 
   function getGenre() {
@@ -26,7 +27,10 @@ export function MovieCard({ movie }: MovieCardProps) {
   }
 
   return (
-    <div className="border rounded-lg overflow-hidden shadow-md">
+    <div
+      className="border rounded-lg overflow-hidden shadow-md hover:shadow-2xl hover:cursor-pointer hover:scale-105 transition duration-700 ease-in-out"
+      onClick={handleOpenModal}
+    >
       <img
         className="w-full min-h-60 md:min-h-80 object-cover"
         src={`https://image.tmdb.org/t/p/w500/${poster_path}`}
