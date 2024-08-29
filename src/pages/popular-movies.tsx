@@ -7,12 +7,15 @@ import { Movie } from "../types/movie";
 export function PopularMovies() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [page, setPage] = useState<number>(1);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const fetchMovies = async () => {
+    setLoading(true);
     const response = await getPopularMovies(page);
     if (response) {
       setMovies(response.results);
     }
+    setLoading(false);
   };
 
   function handleOpenModal() {
@@ -33,18 +36,27 @@ export function PopularMovies() {
           Find out what's trending in the world of cinema.
         </p>
       </header>
-      <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-10 mt-10">
-        {movies.map((movie) => (
-          <MovieCard
-            key={movie.id}
-            movie={movie}
-            handleOpenModal={handleOpenModal}
-          />
-        ))}
-      </section>
-      <footer className="mt-10">
-        <Pagination page={page} onPageChanged={setPage} />
-      </footer>
+
+      {loading ? (
+        <div className="flex justify-center items-center h-60">
+          <p>Loading...</p>
+        </div>
+      ) : (
+        <>
+          <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-10 mt-10">
+            {movies.map((movie) => (
+              <MovieCard
+                key={movie.id}
+                movie={movie}
+                handleOpenModal={handleOpenModal}
+              />
+            ))}
+          </section>
+          <footer className="mt-10">
+            <Pagination page={page} onPageChanged={setPage} />
+          </footer>
+        </>
+      )}
     </div>
   );
 }
