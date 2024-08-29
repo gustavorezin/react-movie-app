@@ -4,8 +4,6 @@ import { Movie } from "../types/movie";
 export interface IPopularMoviesResponse {
   page: number;
   results: Movie[];
-  total_pages: number;
-  total_results: number;
 }
 
 export async function getPopularMovies(
