@@ -1,11 +1,23 @@
 import { api } from "../lib/axios";
+import { Movie } from "../types/movie";
 
-export async function getPopularMovies() {
+export interface IPopularMoviesResponse {
+  page: number;
+  results: Movie[];
+  total_pages: number;
+  total_results: number;
+}
+
+export async function getPopularMovies(
+  page: number
+): Promise<IPopularMoviesResponse | null> {
   try {
-    const response = await api.get("/movie/popular");
-    return response.data.results;
+    const response = await api.get<IPopularMoviesResponse>(
+      `/movie/popular?page=${page}`
+    );
+    return response.data;
   } catch (error) {
     console.error("Error fetching popular movies", error);
-    return [];
+    return null;
   }
 }

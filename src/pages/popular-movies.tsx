@@ -1,15 +1,28 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { MovieCard } from "../components/movie-card";
+import { Pagination } from "../components/pagination";
 import { getPopularMovies } from "../services/get-popular-movies";
 import { Movie } from "../types/movie";
 
 export function PopularMovies() {
   const [movies, setMovies] = useState<Movie[]>([]);
+  const [page, setPage] = useState<number>(2);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [totalResults, setTotalResults] = useState<number>(0);
 
-  async function fetchMovies() {
-    const popularMovies = await getPopularMovies();
-    setMovies(popularMovies);
+  function handlePaginate(pageIndex: number) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    setPage(pageIndex);
   }
+
+  const fetchMovies = useCallback(async () => {
+    const response = await getPopularMovies(page);
+    if (response) {
+      setMovies(response.results);
+      setTotalPages(response.total_pages);
+      setTotalResults(response.total_results);
+    }
+  }, [page]);
 
   function handleOpenModal() {
     alert("clicou");
@@ -17,7 +30,7 @@ export function PopularMovies() {
 
   useEffect(() => {
     fetchMovies();
-  }, []);
+  }, [fetchMovies]);
 
   return (
     <div className="max-w-7xl mx-auto my-10 px-6">
@@ -36,6 +49,14 @@ export function PopularMovies() {
           />
         ))}
       </section>
+      <footer className="mt-10">
+        <Pagination
+          page={page}
+          total_pages={totalPages}
+          total_results={totalResults}
+          onPageChanged={handlePaginate}
+        />
+      </footer>
     </div>
   );
 }
