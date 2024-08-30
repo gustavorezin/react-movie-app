@@ -3,11 +3,13 @@ import { MovieCard } from "../components/movie-card";
 import { Pagination } from "../components/pagination";
 import { getPopularMovies } from "../services/get-popular-movies";
 import { Movie } from "../types/movie";
+import { Modal } from "../components/modal";
 
 export function PopularMovies() {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [movies, setMovies] = useState<Movie[]>([]);
   const [page, setPage] = useState<number>(1);
-  const [loading, setLoading] = useState<boolean>(false);
 
   const fetchMovies = async () => {
     setLoading(true);
@@ -18,8 +20,12 @@ export function PopularMovies() {
     setLoading(false);
   };
 
-  function handleOpenModal() {
-    alert("clicou");
+  function handleOpenModal(movie: Movie) {
+    setSelectedMovie(movie);
+  }
+
+  function handleCloseModal() {
+    setSelectedMovie(null);
   }
 
   useEffect(() => {
@@ -48,7 +54,7 @@ export function PopularMovies() {
               <MovieCard
                 key={movie.id}
                 movie={movie}
-                handleOpenModal={handleOpenModal}
+                handleOpenModal={() => handleOpenModal(movie)}
               />
             ))}
           </section>
@@ -56,6 +62,14 @@ export function PopularMovies() {
             <Pagination page={page} onPageChanged={setPage} />
           </footer>
         </>
+      )}
+
+      {selectedMovie && (
+        <Modal
+          movie={selectedMovie}
+          isOpen={!!selectedMovie}
+          onClose={handleCloseModal}
+        />
       )}
     </div>
   );
