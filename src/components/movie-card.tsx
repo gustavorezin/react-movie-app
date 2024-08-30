@@ -42,7 +42,7 @@ export function MovieCard({ movie, handleOpenModal }: MovieCardProps) {
             <h3 className="line-clamp-1 font-bold leading-4 text-sm md:text-base">
               {title}
             </h3>
-            <span className="text-teal-800 text-xs md:text-sm">
+            <span className="text-teal-800 text-xs md:text-sm line-clamp-1">
               {getGenre()}
             </span>
           </div>
